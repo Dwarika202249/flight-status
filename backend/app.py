@@ -1,10 +1,12 @@
 from flask import Flask, jsonify, request
 from pymongo import MongoClient
-# from flightdata import flights
 from flask_cors import CORS
 from twilio.rest import Client
 from dotenv import load_dotenv
 import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 load_dotenv()
 
@@ -24,7 +26,11 @@ TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 
 twilio_client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
-# flights_collection.insert_many(flights)
+# Email configuration
+SMTP_SERVER = os.getenv('SMTP_SERVER')
+SMTP_PORT = os.getenv('SMTP_PORT')
+EMAIL_USER = os.getenv('EMAIL_USER')
+EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
 @app.route('/flights', methods=['GET'])
 def get_flights():
@@ -80,6 +86,24 @@ def send_sms(to, message):
     except Exception as e:
         print(f"Failed to send SMS: {e}")
 
+def send_email(to_email, subject, body):
+    try:
+        msg = MIMEMultipart()
+        msg['From'] = EMAIL_USER
+        msg['To'] = to_email
+        msg['Subject'] = subject
+        msg.attach(MIMEText(body, 'plain'))
+
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server.starttls()
+        server.login(EMAIL_USER, EMAIL_PASSWORD)
+        text = msg.as_string()
+        server.sendmail(EMAIL_USER, to_email, text)
+        server.quit()
+        print(f"Email sent to {to_email}")
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+
 @app.route('/update_flight_status', methods=['POST'])
 def update_flight_status():
     data = request.json
@@ -96,6 +120,8 @@ def update_flight_status():
         message = f"Flight {flight_number} status has changed to {new_status}."
         if subscription['phone']:
             send_sms(subscription['phone'], message)
+        if subscription['email']:
+            send_email(subscription['email'], "Flight Status Update", message)
 
     return jsonify({"message": "Flight status updated and notifications sent."})
 
