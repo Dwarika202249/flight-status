@@ -6,6 +6,7 @@ const Admin = () => {
   const [flights, setFlights] = useState([]);
   const [selectedFlight, setSelectedFlight] = useState('');
   const [newStatus, setNewStatus] = useState('');
+  const [newGate, setNewGate] = useState('');
 
   useEffect(() => {
     fetchFlights();
@@ -26,6 +27,7 @@ const Admin = () => {
         await axios.post('http://localhost:5000/update_flight_status', {
           flight_number: selectedFlight,
           status: newStatus,
+          gate: newGate,
         });
         alert('Flight status updated and notifications sent.');
         fetchFlights(); // Refresh the flight list
@@ -65,6 +67,15 @@ const Admin = () => {
           type="text"
           value={newStatus}
           onChange={(e) => setNewStatus(e.target.value)}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="gate">New Gate:</label>
+        <input
+          id="gate"
+          type="text"
+          value={newGate}
+          onChange={(e) => setNewGate(e.target.value)}
         />
       </div>
       <button onClick={handleStatusChange}>Update Status</button>
