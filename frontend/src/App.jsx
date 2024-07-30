@@ -7,6 +7,7 @@ function App() {
 
   return (
     <>
+      {/* <Navbar /> */}
       <Router>
       <div className="App">
         <Routes>

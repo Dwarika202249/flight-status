@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './admin.css';
 
 const Admin = () => {
   const [flights, setFlights] = useState([]);
-  const [selectedFlight, setSelectedFlight] = useState(null);
+  const [selectedFlight, setSelectedFlight] = useState('');
   const [newStatus, setNewStatus] = useState('');
 
   useEffect(() => {
@@ -38,8 +39,10 @@ const Admin = () => {
   };
 
   return (
-    <div>
-      <h2>Admin Panel</h2>
+    <div className="admin">
+      <h1 className='admin-head'>Admin Panel</h1>
+      <div className="admin-container">
+      <h2>Update Flight Status</h2>
       <div>
         <label htmlFor="flight">Select Flight:</label>
         <select
@@ -65,6 +68,7 @@ const Admin = () => {
         />
       </div>
       <button onClick={handleStatusChange}>Update Status</button>
+    </div>
     </div>
   );
 };

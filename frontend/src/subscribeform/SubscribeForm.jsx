@@ -37,10 +37,10 @@ function SubscribeForm({ flightNumber, onClose }) {
   };
 
   return (
-    <div>
+    <div className="subscribe-form-container">
       <h2>Subscribe to Flight {flightNumber}</h2>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className='susbcribe-details-container'>
           <label>Email:</label>
           <input
             type="email"
@@ -49,7 +49,7 @@ function SubscribeForm({ flightNumber, onClose }) {
             required
           />
         </div>
-        <div>
+        <div className='susbcribe-details-container'>
           <label>Phone (optional):</label>
           <input
             type="text"

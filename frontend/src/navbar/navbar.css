@@ -1,0 +1,61 @@
+/* .navbar {
+    height: 40vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.left-nav {
+    flex: 1;
+}
+
+.logo {
+    height: 15rem;
+}
+
+.right-nav {
+    flex: 2;
+} */
+
+/* src/components/navbar.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40vh; /* Set height to 40vh */
+    width: 100%; /* Full width */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: white;
+    margin-bottom: 20px;
+    transition: background-image 1s ease-in-out;
+  }
+  
+  .left-nav {
+    position: relative;
+    margin-left: 20px;
+  }
+  
+  .logo {
+    height: 5rem;
+    width: auto;
+    background: rgba(255, 255, 255, 0.7); /* Low transparency background */
+    border-radius: 10px;
+  }
+  
+  .right-nav {
+    position: relative;
+    margin-right: 20px; /* Add some margin to the right */
+  }
+  
+  .overlay-text {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  }
+
+  .indigo-text {
+    color: rgb(128, 164, 243);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  }
+  
