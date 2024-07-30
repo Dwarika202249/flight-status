@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import './subscribeForm.css'
 
-function SubscribeForm({ flightNumber, onClose }) {
+function SubscribeForm({ flightNumber}) {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [userId] = useState(uuidv4()); // Generate unique user ID
+  const [message, setMessage] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,12 +29,15 @@ function SubscribeForm({ flightNumber, onClose }) {
     .then(response => response.json())
     .then(data => {
       console.log('Subscription added:', data);
+      setMessage('Subscribed successfully!');
       // Clear form fields
       setEmail('');
       setPhone('');
-      onClose(); // Close popup after successful subscription
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {console.error('Error:', error)
+      setMessage('Failed to subscribe for notifications.')
+    });
+    ;
   };
 
   return (
@@ -59,6 +63,7 @@ function SubscribeForm({ flightNumber, onClose }) {
         </div>
         <button type="submit">Subscribe</button>
       </form>
+      {message && <p className='subs-message'>{message}</p>}
     </div>
   );
 }

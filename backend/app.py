@@ -76,13 +76,12 @@ def send_sms(to, message):
         return
     to = format_phone_number(to)
     try:
-        print(f"SMS sent to {to}")
         twilio_client.messages.create(
             body=message,
             from_=TWILIO_PHONE_NUMBER,
             to=to
         )
-        print(f"SMS sent to {to}")
+        # print(f"SMS sent to {to}")
     except Exception as e:
         print(f"Failed to send SMS: {e}")
 

@@ -44,7 +44,7 @@ function FlightDashboard() {
         <ul className='flight-list-heading'>
           <li className="flight-num">Flight Number</li>
           <li className="status">Status</li>
-          <li className="status">Gate no.</li>
+          <li className="gate-num">Gate no.</li>
         </ul>
         {flights.map(flight => (
           <li
@@ -54,6 +54,8 @@ function FlightDashboard() {
           >
             <span className="flight-number"> {flight.flight_number}</span>
             <span className="flight-status">{flight.status}</span>
+            <span className="flight-gate">{flight.gate}</span>
+            
           </li>
         ))}
       </ul>

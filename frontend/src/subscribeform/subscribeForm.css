@@ -68,3 +68,9 @@
 .subscribe-form-container button:focus {
   outline: none;
 }
+
+.subs-message {
+  margin-top: 10px;
+  color: green;
+  font-weight: bold;
+}
