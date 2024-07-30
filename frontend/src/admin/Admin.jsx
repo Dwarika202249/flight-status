@@ -7,9 +7,11 @@ const Admin = () => {
   const [selectedFlight, setSelectedFlight] = useState('');
   const [newStatus, setNewStatus] = useState('');
   const [newGate, setNewGate] = useState('');
+  const [gateNumbers, setGateNumbers] = useState([]);
 
   useEffect(() => {
     fetchFlights();
+    fetchGateNumbers();
   }, []);
 
   const fetchFlights = async () => {
@@ -18,6 +20,16 @@ const Admin = () => {
       setFlights(response.data);
     } catch (error) {
       console.error('Error fetching flights:', error);
+    }
+  };
+
+  const fetchGateNumbers = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/gate_numbers');
+      setGateNumbers(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching gate numbers:', error);
     }
   };
 
@@ -69,7 +81,7 @@ const Admin = () => {
           onChange={(e) => setNewStatus(e.target.value)}
         />
       </div>
-      <div className="form-group">
+      {/* <div className="form-group">
         <label htmlFor="gate">New Gate:</label>
         <input
           id="gate"
@@ -77,6 +89,21 @@ const Admin = () => {
           value={newGate}
           onChange={(e) => setNewGate(e.target.value)}
         />
+      </div> */}
+      <div className="form-group">
+        <label htmlFor="gate">New Gate Number:</label>
+        <select
+          id="gate"
+          value={newGate}
+          onChange={(e) => setNewGate(e.target.value)}
+        >
+          <option value="">--Select Gate--</option>
+          {gateNumbers.map((gate) => (
+            <option key={gate} value={gate}>
+              {gate}
+            </option>
+          ))}
+        </select>
       </div>
       <button onClick={handleStatusChange}>Update Status</button>
     </div>

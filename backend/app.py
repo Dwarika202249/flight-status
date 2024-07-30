@@ -69,22 +69,6 @@ def format_phone_number(phone):
         phone = '+91' + phone
     return phone
 
-# def send_sms(to, message):
-#     # Ensure credentials are loaded
-#     if not TWILIO_ACCOUNT_SID or not TWILIO_AUTH_TOKEN or not TWILIO_PHONE_NUMBER:
-#         print("Twilio credentials are missing.")
-#         return
-#     to = format_phone_number(to)
-#     try:
-#         twilio_client.messages.create(
-#             body=message,
-#             from_=TWILIO_PHONE_NUMBER,
-#             to=to
-#         )
-#         # print(f"SMS sent to {to}")
-#     except Exception as e:
-#         print(f"Failed to send SMS: {e}")
-
 def send_sms(to, message):
     if not TWILIO_ACCOUNT_SID or not TWILIO_AUTH_TOKEN or not TWILIO_PHONE_NUMBER:
         print("Twilio credentials are missing.")
@@ -101,31 +85,6 @@ def send_sms(to, message):
         print(f"SMS sent to {to}")
     except Exception as e:
         print(f"Failed to send SMS: {e}")
-
-
-# def send_email(to_email, subject, body):
-#     try:
-#         msg = MIMEMultipart()
-#         msg['From'] = EMAIL_USER
-#         msg['To'] = to_email
-#         msg['Subject'] = subject
-#         msg.attach(MIMEText(body, 'plain'))
-
-#         server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-#         server.starttls()
-#         server.login(EMAIL_USER, EMAIL_PASSWORD)
-#         text = msg.as_string()
-#         server.sendmail(EMAIL_USER, to_email, text)
-#         server.quit()
-#         print(f"Email sent to {to_email}")
-#     except Exception as e:
-#         print(f"Failed to send email: {e}")
-
-# @app.route('/update_flight_status', methods=['POST'])
-# def update_flight_status():
-#     data = request.json
-#     flight_number = data.get('flight_number')
-#     new_status = data.get('status')
 
 def send_email(to_email, flight_number, new_status, new_gate):
     try:
@@ -149,26 +108,41 @@ def send_email(to_email, flight_number, new_status, new_gate):
         msg['From'] = EMAIL_USER
         msg['To'] = to_email
 
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+        with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT) as server:
             server.login(EMAIL_USER, EMAIL_PASSWORD)
             server.sendmail(EMAIL_USER, to_email, msg.as_string())
         print(f"Email sent to {to_email}")
     except Exception as e:
         print(f"Failed to send email: {e}")
+        
+@app.route('/gate_numbers', methods=['GET'])
+def get_gate_numbers():
+    gate_numbers = flights_collection.distinct('gate')  # Fetch unique gate numbers
+    return jsonify(gate_numbers)
 
+# @app.route('/update_flight_status', methods=['POST'])
+# def update_flight_status():
+#     data = request.json
+#     flight_number = data.get('flight_number')
+#     new_status = data.get('status')
+#     new_gate = data.get('gate', '')  # Default to empty string if gate not provided
 
 #     flights_collection.update_one(
 #         {"flight_number": flight_number},
-#         {"$set": {"status": new_status}}
+#         {"$set": {"status": new_status, "gate": new_gate}}
 #     )
 
 #     subscriptions = subscriptions_collection.find({"flight_number": flight_number})
 #     for subscription in subscriptions:
-#         message = f"Flight {flight_number} status has changed to {new_status}."
+#         message_data = {
+#             "flight_number": flight_number,
+#             "status": new_status,
+#             "gate": new_gate
+#         }
 #         if subscription['phone']:
-#             send_sms(subscription['phone'], message)
+#             send_sms(subscription['phone'], message_data)
 #         if subscription['email']:
-#             send_email(subscription['email'], "Flight Status Update", message)
+#             send_email(subscription['email'], flight_number, new_status, new_gate)
 
 #     return jsonify({"message": "Flight status updated and notifications sent."})
 
@@ -177,8 +151,9 @@ def update_flight_status():
     data = request.json
     flight_number = data.get('flight_number')
     new_status = data.get('status')
-    new_gate = data.get('gate', '')  # Default to empty string if gate not provided
+    new_gate = data.get('gate', '')  
 
+    # Update flight details
     flights_collection.update_one(
         {"flight_number": flight_number},
         {"$set": {"status": new_status, "gate": new_gate}}
@@ -186,17 +161,16 @@ def update_flight_status():
 
     subscriptions = subscriptions_collection.find({"flight_number": flight_number})
     for subscription in subscriptions:
-        message_data = {
-            "flight_number": flight_number,
-            "status": new_status,
-            "gate": new_gate
-        }
         if subscription['phone']:
-            send_sms(subscription['phone'], message_data)
+            send_sms(subscription['phone'], {
+                'flight_number': flight_number,
+                'status': new_status,
+                'gate': new_gate
+            })
         if subscription['email']:
             send_email(subscription['email'], flight_number, new_status, new_gate)
 
-    return jsonify({"message": "Flight status updated and notifications sent."})
+    return jsonify({"message": "Flight status and gate updated, notifications sent."})
 
 
 if __name__ == '__main__':
