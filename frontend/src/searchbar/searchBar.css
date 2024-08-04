@@ -1,8 +1,15 @@
 .searchBar {
     width: 80%;
     padding: 15px 10px;
-    border: none;
+    border: 1px solid #ddd;
     margin: 20px 0;
     font-size: 20px;
+    transition: border-color 0.3s ease;
+    border-radius: 5px;
 
+}
+
+.searchBar:focus {
+    border-color: #ff4081;
+    outline: none;
 }

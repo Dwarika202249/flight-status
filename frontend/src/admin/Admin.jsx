@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './admin.css';
+import AddFlight from '../addflight/AddFlight';
 
 const Admin = () => {
   const [flights, setFlights] = useState([]);
@@ -8,11 +9,16 @@ const Admin = () => {
   const [newStatus, setNewStatus] = useState('');
   const [newGate, setNewGate] = useState('');
   const [gateNumbers, setGateNumbers] = useState([]);
+  const [toggle, setToggle] = useState(false);
 
   useEffect(() => {
     fetchFlights();
     fetchGateNumbers();
   }, []);
+
+  const handleToggle = () => {
+    setToggle(!toggle)
+  }
 
   const fetchFlights = async () => {
     try {
@@ -27,7 +33,7 @@ const Admin = () => {
     try {
       const response = await axios.get('http://localhost:5000/gate_numbers');
       setGateNumbers(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.error('Error fetching gate numbers:', error);
     }
@@ -55,7 +61,11 @@ const Admin = () => {
   return (
     <div className="admin">
       <h1 className='admin-head'>Admin Panel</h1>
-      <div className="admin-container">
+      <button className='toggleBtn' onClick={handleToggle}>Go to {!toggle ? "Add New Flight" : "Update Flight Status"}</button>
+      {
+        toggle ? <AddFlight /> : 
+        <div className="admin-container">
+      
       <h2>Update Flight Status</h2>
       <div>
         <label htmlFor="flight">Select Flight:</label>
@@ -81,15 +91,6 @@ const Admin = () => {
           onChange={(e) => setNewStatus(e.target.value)}
         />
       </div>
-      {/* <div className="form-group">
-        <label htmlFor="gate">New Gate:</label>
-        <input
-          id="gate"
-          type="text"
-          value={newGate}
-          onChange={(e) => setNewGate(e.target.value)}
-        />
-      </div> */}
       <div className="form-group">
         <label htmlFor="gate">New Gate Number:</label>
         <select
@@ -107,6 +108,8 @@ const Admin = () => {
       </div>
       <button onClick={handleStatusChange}>Update Status</button>
     </div>
+      }
+      
     </div>
   );
 };

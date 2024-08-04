@@ -7,6 +7,7 @@ import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+# from flightdata import flights
 
 load_dotenv()
 
@@ -18,6 +19,8 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client.flight_dashboard
 flights_collection = db.flights
 subscriptions_collection = db.subscriptions
+
+# flights_collection.insert_many(flights)
 
 # Twilio configuration
 TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
@@ -40,6 +43,37 @@ def get_flights():
         flight['_id'] = str(flight['_id'])  # Convert ObjectId to string
         flight_list.append(flight)
     return jsonify(flight_list)
+
+@app.route('/addflight', methods=['POST'])
+def addflights():
+    data = request.json
+    flight_number = data.get('flight_number')
+    status = data.get('status')
+    departure_time = data.get('departure_time')
+    arrival_time = data.get('arrival_time')
+    gate = data.get('gate')
+    
+    if not flight_number:
+        return jsonify({"error": "Flight no. is required!"}), 400
+    
+    if not status:
+        return jsonify({"error": "Status is required!"}), 400
+    
+    if not gate:
+        return jsonify({"error": "Gate is required!"}), 400
+    
+    flight = {
+        "flight_number": flight_number,
+        "status": status,
+        "departure_time": departure_time,
+        "arrival_time": arrival_time,
+        "gate": gate,
+    }
+    
+    result = flights_collection.insert_one(flight)
+    
+    return jsonify({"message": "New Flight added successfully", "id": str(result.inserted_id)})
+    
 
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
