@@ -120,31 +120,7 @@ def get_gate_numbers():
     gate_numbers = flights_collection.distinct('gate')  # Fetch unique gate numbers
     return jsonify(gate_numbers)
 
-# @app.route('/update_flight_status', methods=['POST'])
-# def update_flight_status():
-#     data = request.json
-#     flight_number = data.get('flight_number')
-#     new_status = data.get('status')
-#     new_gate = data.get('gate', '')  # Default to empty string if gate not provided
 
-#     flights_collection.update_one(
-#         {"flight_number": flight_number},
-#         {"$set": {"status": new_status, "gate": new_gate}}
-#     )
-
-#     subscriptions = subscriptions_collection.find({"flight_number": flight_number})
-#     for subscription in subscriptions:
-#         message_data = {
-#             "flight_number": flight_number,
-#             "status": new_status,
-#             "gate": new_gate
-#         }
-#         if subscription['phone']:
-#             send_sms(subscription['phone'], message_data)
-#         if subscription['email']:
-#             send_email(subscription['email'], flight_number, new_status, new_gate)
-
-#     return jsonify({"message": "Flight status updated and notifications sent."})
 
 @app.route('/update_flight_status', methods=['POST'])
 def update_flight_status():
