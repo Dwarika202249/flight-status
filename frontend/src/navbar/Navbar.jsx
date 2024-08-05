@@ -46,7 +46,7 @@ const Navbar = () => {
     <div className="navbar" style={{ backgroundImage: `url(${bgImage})` }}>
       <div className="left-nav">
         <img className="logo" src={logo} alt="logo" />
-        <h1 className='indigo-text'>IndiGo</h1>
+        <h1 className='indigo-text'>Aeroplus</h1>
       </div>
       <div className="right-nav">
         <h1 className="overlay-text">Flight Notification System</h1>
