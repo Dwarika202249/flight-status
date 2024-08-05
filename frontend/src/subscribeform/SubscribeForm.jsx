@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import './subscribeForm.css'
+import { BACKEND_URL } from '../route';
 
 function SubscribeForm({ flightNumber}) {
   const [email, setEmail] = useState('');
@@ -14,7 +15,7 @@ function SubscribeForm({ flightNumber}) {
       alert('Email is required!');
       return;
     }
-    fetch('https://flight-backend-6qlx.onrender.com/subscribe', {
+    fetch(`${BACKEND_URL}/subscribe`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

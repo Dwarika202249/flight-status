@@ -1,24 +1,34 @@
-import Admin from './admin/Admin'
-import './App.css'
-import FlightDashboard from './flightdashboard/FlightDashboard'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useState } from 'react';
+import Admin from './admin/Admin';
+import AdminLogin from './login/AdminLogin';
+import './App.css';
+import FlightDashboard from './flightdashboard/FlightDashboard';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+  };
 
   return (
     <>
-      {/* <Navbar /> */}
       <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/" element={<FlightDashboard />} />
-        </Routes>
-      </div>
-    </Router>
-        
+        <div className="App">
+          <Routes>
+            <Route path="/admin" element={isAuthenticated ? <Admin /> : <Navigate to="/admin-login" />} />
+            <Route path="/admin-login" element={<AdminLogin onLogin={handleLogin} />} />
+            <Route path="/" element={<FlightDashboard />} />
+          </Routes>
+        </div>
+      </Router>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

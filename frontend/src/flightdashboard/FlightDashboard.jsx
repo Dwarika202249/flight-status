@@ -3,6 +3,7 @@ import "./flightDashboard.css";
 import SubscribeForm from "../subscribeform/SubscribeForm";
 import Navbar from "../navbar/Navbar";
 import SearchBar from "../searchbar/SearchBar";
+import { BACKEND_URL } from "../route";
 
 function FlightDashboard() {
   const [flights, setFlights] = useState([]);
@@ -10,8 +11,7 @@ function FlightDashboard() {
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
-    fetch("https://flight-backend-6qlx.onrender.com/flights")
-    // fetch("http://localhost:5000/flights")
+    fetch(`${BACKEND_URL}/flights`)
       .then((response) => response.json())
       .then((data) => setFlights(data))
       .catch((error) => console.error("Error fetching flights:", error));

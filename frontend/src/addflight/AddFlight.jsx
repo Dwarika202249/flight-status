@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./addFlight.css";
+import { BACKEND_URL } from "../route";
 
 const AddFlight = () => {
   const [flightNumber, setFlightNumber] = useState("");
@@ -23,7 +24,7 @@ const AddFlight = () => {
       return;
     }
 
-    fetch("https://flight-backend-6qlx.onrender.com/addflight", {
+    fetch(`${BACKEND_URL}/addflight`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',

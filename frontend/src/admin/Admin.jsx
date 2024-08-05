@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './admin.css';
 import AddFlight from '../addflight/AddFlight';
+import { BACKEND_URL } from '../route';
 
 const Admin = () => {
   const [flights, setFlights] = useState([]);
@@ -22,7 +23,7 @@ const Admin = () => {
 
   const fetchFlights = async () => {
     try {
-      const response = await axios.get('https://flight-backend-6qlx.onrender.com/flights');
+      const response = await axios.get(`${BACKEND_URL}/flights`);
       setFlights(response.data);
     } catch (error) {
       console.error('Error fetching flights:', error);
@@ -31,7 +32,7 @@ const Admin = () => {
 
   const fetchGateNumbers = async () => {
     try {
-      const response = await axios.get('https://flight-backend-6qlx.onrender.com/gate_numbers');
+      const response = await axios.get(`${BACKEND_URL}/gate_numbers`);
       setGateNumbers(response.data);
       // console.log(response.data);
     } catch (error) {
@@ -42,7 +43,7 @@ const Admin = () => {
   const handleStatusChange = async () => {
     if (selectedFlight && newStatus) {
       try {
-        await axios.post('https://flight-backend-6qlx.onrender.com/update_flight_status', {
+        await axios.post(`${BACKEND_URL}/update_flight_status`, {
           flight_number: selectedFlight,
           status: newStatus,
           gate: newGate,

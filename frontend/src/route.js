@@ -1,0 +1,1 @@
+export const BACKEND_URL = "https://flight-backend-6qlx.onrender.com"
