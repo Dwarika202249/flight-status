@@ -10,7 +10,8 @@ function FlightDashboard() {
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/flights")
+    fetch("https://flight-backend-6qlx.onrender.com/flights")
+    // fetch("http://localhost:5000/flights")
       .then((response) => response.json())
       .then((data) => setFlights(data))
       .catch((error) => console.error("Error fetching flights:", error));

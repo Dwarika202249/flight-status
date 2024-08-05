@@ -14,7 +14,7 @@ function SubscribeForm({ flightNumber}) {
       alert('Email is required!');
       return;
     }
-    fetch('http://localhost:5000/subscribe', {
+    fetch('https://flight-backend-6qlx.onrender.com/subscribe', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

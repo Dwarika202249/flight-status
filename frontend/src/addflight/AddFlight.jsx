@@ -23,7 +23,7 @@ const AddFlight = () => {
       return;
     }
 
-    fetch("http://localhost:5000/addflight", {
+    fetch("https://flight-backend-6qlx.onrender.com/addflight", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
