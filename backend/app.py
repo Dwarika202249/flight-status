@@ -14,8 +14,11 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
+mongo_uri = os.getenv("MONGO_URI")
+
 # MongoDB connection
-client = MongoClient("mongodb://localhost:27017/")
+# client = MongoClient("mongodb://localhost:27017/")
+client = MongoClient(mongo_uri)
 db = client.flight_dashboard
 flights_collection = db.flights
 subscriptions_collection = db.subscriptions
@@ -171,12 +174,12 @@ def update_flight_status():
 
     subscriptions = subscriptions_collection.find({"flight_number": flight_number})
     for subscription in subscriptions:
-        # if subscription['phone']:
-        #     send_sms(subscription['phone'], {
-        #         'flight_number': flight_number,
-        #         'status': new_status,
-        #         'gate': new_gate
-        #     })
+        if subscription['phone']:
+            send_sms(subscription['phone'], {
+                'flight_number': flight_number,
+                'status': new_status,
+                'gate': new_gate
+            })
         if subscription['email']:
             send_email(subscription['email'], flight_number, new_status, new_gate)
 
