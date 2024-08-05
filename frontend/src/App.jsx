@@ -11,7 +11,7 @@ function App() {
       <Router>
       <div className="App">
         <Routes>
-          <Route path="/admin" element={<Admin />} />
+          <Route path="https://flight-backend-6qlx.onrender.com/admin" element={<Admin />} />
           <Route path="/" element={<FlightDashboard />} />
         </Routes>
       </div>
