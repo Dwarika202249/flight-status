@@ -17,6 +17,7 @@ The Flight Dashboard Notification System is a web application designed to help a
 2. **Admin Panel:**
    - Allows admins to update flight statuses and gate numbers.
    - Triggers notifications to subscribed users upon status change.
+   - Admin Credentials: admin password
 
 3. **Notifications:**
    - SMS notifications using Twilio API.
